@@ -1,4 +1,4 @@
-import { MoveRight, PhoneCall } from "lucide-react";
+import { Compass, MoveRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { signUpWithGithub } from "@/lib/server/oauth";
@@ -7,7 +7,7 @@ export const Hero = async () => {
   return (
     <div className="w-full">
       <div className="container mx-auto">
-        <div className="flex gap-8 py-20 lg:py-40 items-center justify-center flex-col">
+        <div className="flex gap-8 py-28 lg:py-40 items-center justify-center flex-col">
           <div>
             <Button variant="secondary" size="sm" className="gap-4">
               Read our launch article <MoveRight className="w-4 h-4" />
@@ -24,9 +24,9 @@ export const Hero = async () => {
               ever.
             </p>
           </div>
-          <div className="flex flex-row gap-3">
+          <div className="flex flex-row gap-3 flex-wrap-reverse justify-center items-center">
             <Button size="lg" className="gap-4" variant="outline">
-              Jump on a call <PhoneCall className="w-4 h-4" />
+              Explore Features <Compass className="h-[18px] w-[18px]" />
             </Button>
 
             {/* TODO: Add loading here */}
@@ -40,4 +40,4 @@ export const Hero = async () => {
       </div>
     </div>
   );
-}; 
+};

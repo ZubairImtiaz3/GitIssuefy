@@ -36,8 +36,7 @@ export const Header = () => {
             </a>
           </div>
           <div className="border-r hidden md:inline"></div>
-          <Button variant="outline">Sign in</Button>
-          <Button>
+          <Button className="hidden sm:block">
             <span className="flex gap-2">
               Star on Github <Github className="h-5 w-5" />
             </span>
