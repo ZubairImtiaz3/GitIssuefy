@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
+    "appwrite": "^14.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.418.0",
     "next": "14.2.5",
+    "node-appwrite": "^13.0.0",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.4.0",
