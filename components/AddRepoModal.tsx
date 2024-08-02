@@ -1,6 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { debounce } from "lodash";
+import axios from "axios";
+
 import { Tag, TagInput } from "emblor";
 import {
   Credenza,
@@ -28,6 +31,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { REPOSITORIES_URL } from "@/constant/constant";
+
+type AddRepositoryModalProps = {
+  githubAuthToken: string | undefined;
+};
 
 function TagForm({ control, setValue }: any) {
   const [tags, setTags] = useState<Tag[]>([]);
@@ -63,15 +71,41 @@ function TagForm({ control, setValue }: any) {
   );
 }
 
-export default function AddRepositoryModal() {
+export default function AddRepositoryModal({
+  githubAuthToken,
+}: AddRepositoryModalProps) {
   const { control, handleSubmit, setValue } = useForm();
   const [open, setOpen] = useState(false);
   const [selectedRepo, setSelectedRepo] = useState<string | null>(null);
   const [repos, setRepos] = useState<string[]>([]);
+  const [query, setQuery] = useState<string>("");
 
   const onSubmit = (data: any) => {
     console.log("Data", data);
   };
+
+  useEffect(() => {
+    const debouncedSearch = debounce(async () => {
+      if (query) {
+        try {
+          const response = await axios.get(`${REPOSITORIES_URL}?q=${query}`, {
+            headers: {
+              Authorization: `token ${githubAuthToken}`,
+            },
+          });
+          setRepos(response.data.items.map((item: any) => item.full_name));
+        } catch (error) {
+          console.error("Error fetching repositories:", error);
+        }
+      } else {
+        setRepos([]);
+      }
+    }, 300);
+
+    debouncedSearch();
+
+    return debouncedSearch.cancel;
+  }, [query, repos, githubAuthToken]);
 
   return (
     <Credenza>
@@ -105,7 +139,11 @@ export default function AddRepositoryModal() {
                   </PopoverTrigger>
                   <PopoverContent className="p-0" align="start">
                     <Command>
-                      <CommandInput placeholder="Search repository..." />
+                      <CommandInput
+                        value={query}
+                        onValueChange={setQuery}
+                        placeholder="Search repository..."
+                      />
                       <CommandList>
                         <CommandEmpty>No results found.</CommandEmpty>
                         <CommandGroup>

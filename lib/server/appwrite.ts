@@ -50,6 +50,21 @@ export async function SignOutUser() {
         await account.deleteSession("current");
         return null;
     } catch (error) {
+        console.error(error);
         return error;
+    }
+}
+
+export async function getGithubIdentity() {
+    try {
+        const { account } = await createSessionClient();
+        const identities = await account.listIdentities([
+            Query.equal('provider', 'github')
+        ]);
+
+        return identities.identities[0];
+    } catch (error) {
+        console.error(error);
+        return null;
     }
 }

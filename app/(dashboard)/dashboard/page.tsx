@@ -8,8 +8,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddRepositoryModal from "@/components/AddRepoModal";
+import { getGithubIdentity } from "@/lib/server/appwrite";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const identity = await getGithubIdentity();
+  const providerToken = identity?.providerAccessToken;
+
   return (
     <>
       <div className="flex gap-4 flex-wrap">
@@ -22,7 +26,7 @@ export default function Dashboard() {
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <AddRepositoryModal />
+            <AddRepositoryModal githubAuthToken={providerToken} />
           </CardFooter>
         </Card>
 
