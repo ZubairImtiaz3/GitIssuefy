@@ -1,9 +1,12 @@
 import { Compass, MoveRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-import { signUpWithGithub } from "@/lib/server/oauth";
+import { AuthButton } from "@/components/AuthButton";
+import { getLoggedInUser } from "@/lib/server/appwrite";
 
 export const Hero = async () => {
+  const user = await getLoggedInUser();
+
   return (
     <div className="w-full">
       <div className="container mx-auto">
@@ -28,13 +31,7 @@ export const Hero = async () => {
             <Button size="lg" className="gap-4" variant="outline">
               Explore Features <Compass className="h-[18px] w-[18px]" />
             </Button>
-
-            {/* TODO: Add loading here */}
-            <form action={signUpWithGithub}>
-              <Button type="submit" size="lg" className="gap-4">
-                Continue With Github <MoveRight className="w-4 h-4" />
-              </Button>
-            </form>
+            <AuthButton user={user} />
           </div>
         </div>
       </div>

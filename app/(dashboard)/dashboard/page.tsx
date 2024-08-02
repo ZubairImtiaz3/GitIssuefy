@@ -15,38 +15,38 @@ export default function Dashboard() {
       <div className="flex gap-4 flex-wrap">
         <Card className="sm:col-span-2 grow xl:grow-0">
           <CardHeader className="pb-3">
-            <CardTitle>Your Orders</CardTitle>
+            <CardTitle>Track Issues</CardTitle>
             <CardDescription className="max-w-lg text-balance leading-relaxed">
-              Introducing Our Dynamic Orders Dashboard for Seamless Management
-              and Insightful Analysis.
+              Stay informed on your favorite open-source projects by watching
+              repositories issues with your labels of interest.
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button>Create New Order</Button>
+            <Button>Watch New Repository</Button>
           </CardFooter>
         </Card>
 
         <div className="flex gap-4 grow">
           <Card className="grow">
             <CardHeader className="pb-2">
-              <CardDescription>This Week</CardDescription>
-              <CardTitle className="text-4xl">$1,329</CardTitle>
+              <CardDescription>Watched Repositories</CardDescription>
+              <CardTitle className="text-4xl">12</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
-                +25% from last week
+                +3 new this week
               </div>
             </CardContent>
           </Card>
 
           <Card className="grow">
             <CardHeader className="pb-2">
-              <CardDescription>This Month</CardDescription>
-              <CardTitle className="text-4xl">$1,329</CardTitle>
+              <CardDescription>Issues Notified</CardDescription>
+              <CardTitle className="text-4xl">47</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
-                +25% from last week
+                +10% from last month
               </div>
             </CardContent>
           </Card>

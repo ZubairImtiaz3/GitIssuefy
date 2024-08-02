@@ -13,8 +13,8 @@ export const WatchRepoTable = () => {
     <>
       <Card>
         <CardHeader className="px-7">
-          <CardTitle>Orders</CardTitle>
-          <CardDescription>Recent orders from your store.</CardDescription>
+          <CardTitle>Watched Repositories</CardTitle>
+          <CardDescription>List of your watched repositories.</CardDescription>
         </CardHeader>
         <CardContent>
           <DataTable searchKey="NAME" columns={columns} data={[]} />
