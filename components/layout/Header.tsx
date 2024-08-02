@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -29,8 +29,39 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { SignOutUser } from "@/lib/server/appwrite";
+import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const DashboardHeader = () => {
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    try {
+      const error = await SignOutUser();
+      if (!error) {
+        toast({
+          title: "Successfully logged out.",
+          description: "Feel free to come back later.",
+        });
+        router.push("/");
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Sign-out Error",
+          description: "An unexpected error occurred during sign-out:",
+        });
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred during sign-out:", error);
+      toast({
+        variant: "destructive",
+        title: "Sign-out Error",
+        description: "An unexpected error occurred during sign-out.",
+      });
+    }
+  };
+
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
       <Sheet>
@@ -128,7 +159,7 @@ const DashboardHeader = () => {
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleSignOut}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

@@ -1,6 +1,5 @@
 import DashboardHeader from "@/components/layout/Header";
 import Sidebar from "@/components/layout/Sidebar";
-import { Toaster } from "@/components/ui/toaster";
 
 import type { Metadata } from "next";
 
@@ -23,7 +22,6 @@ export default function DashboardLayout({
           <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
             {children}
           </main>
-          <Toaster />
         </div>
       </div>
     </>
