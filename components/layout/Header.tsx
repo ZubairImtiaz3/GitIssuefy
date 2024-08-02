@@ -77,8 +77,7 @@ const DashboardHeader = () => {
               href="#"
               className="flex items-center gap-2 text-lg font-semibold"
             >
-              <Package2 className="h-6 w-6" />
-              <span className="sr-only">Acme Inc</span>
+              <span className="sr-only">GitIssuefy</span>
             </Link>
             <Link
               href="#"
@@ -135,16 +134,7 @@ const DashboardHeader = () => {
         </SheetContent>
       </Sheet>
       <div className="w-full flex-1">
-        <form>
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search products..."
-              className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-            />
-          </div>
-        </form>
+        <span className="invisible"></span>
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

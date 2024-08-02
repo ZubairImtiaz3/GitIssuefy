@@ -20,8 +20,8 @@ export const AuthButton = ({ user }: AuthButtonProps) => {
       const error = await signUpWithGithub();
       if (!error) {
         toast({
-          title: "Successfully logged out.",
-          description: "Feel free to come back later.",
+          title: "Successfully logged in.",
+          description: "Redirecting to your Dashboard.",
         });
       } else {
         toast({
