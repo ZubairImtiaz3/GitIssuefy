@@ -1,5 +1,4 @@
 import { WatchRepoTable } from "@/components/tables/repository-table/watch-repo-table";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import AddRepositoryModal from "@/components/AddRepoModal";
 
 export default function Dashboard() {
   return (
@@ -22,7 +22,7 @@ export default function Dashboard() {
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button>Watch New Repository</Button>
+            <AddRepositoryModal />
           </CardFooter>
         </Card>
 
