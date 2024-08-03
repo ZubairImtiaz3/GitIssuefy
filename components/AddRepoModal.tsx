@@ -1,10 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { debounce } from "lodash";
 import axios from "axios";
 
-import { Tag, TagInput } from "emblor";
 import {
   Credenza,
   CredenzaBody,
@@ -31,45 +30,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { REPOSITORIES_URL } from "@/constant/constant";
+import { BASE_GITHUB_URL } from "@/constant/constant";
+import TagForm from "@/components/TagForm";
 
 type AddRepositoryModalProps = {
   githubAuthToken: string | undefined;
 };
-
-function TagForm({ control, setValue }: any) {
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
-
-  return (
-    <Controller
-      name="tags"
-      control={control}
-      render={({ field }) => (
-        <TagInput
-          styleClasses={{
-            input: "shadow-none",
-            tag: {
-              body: "pl-2",
-            },
-            inlineTagsContainer: "ml-1",
-          }}
-          {...field}
-          placeholder="Enter your labels of interest"
-          tags={tags}
-          className="sm:min-w-[450px]"
-          activeTagIndex={activeTagIndex}
-          setActiveTagIndex={setActiveTagIndex}
-          setTags={(newTags) => {
-            setTags(newTags);
-            setValue("tags", newTags as [Tag, ...Tag[]]);
-          }}
-          textCase={"lowercase"}
-        />
-      )}
-    />
-  );
-}
 
 export default function AddRepositoryModal({
   githubAuthToken,
@@ -81,18 +47,21 @@ export default function AddRepositoryModal({
   const [query, setQuery] = useState<string>("");
 
   const onSubmit = (data: any) => {
-    console.log("Data", data);
+    console.log("Data", { ...data, repository: selectedRepo });
   };
 
   useEffect(() => {
     const debouncedSearch = debounce(async () => {
       if (query) {
         try {
-          const response = await axios.get(`${REPOSITORIES_URL}?q=${query}`, {
-            headers: {
-              Authorization: `token ${githubAuthToken}`,
-            },
-          });
+          const response = await axios.get(
+            `${BASE_GITHUB_URL}/search/repositories?q=${query}`,
+            {
+              headers: {
+                Authorization: `token ${githubAuthToken}`,
+              },
+            }
+          );
           setRepos(response.data.items.map((item: any) => item.full_name));
         } catch (error) {
           console.error("Error fetching repositories:", error);
@@ -165,12 +134,12 @@ export default function AddRepositoryModal({
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="flex items-center gap-4">
-                <Label htmlFor="Issue Labels" className="text-left">
-                  Issue Labels
-                </Label>
-                <TagForm control={control} setValue={setValue} />
-              </div>
+              <TagForm
+                control={control}
+                setValue={setValue}
+                githubAuthToken={githubAuthToken}
+                selectedRepo={selectedRepo}
+              />
             </div>
           </CredenzaBody>
           <CredenzaFooter>

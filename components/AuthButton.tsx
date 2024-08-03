@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MoveRight } from "lucide-react";
 import { signUpWithGithub } from "@/lib/server/oauth";
-import { toast } from "./ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 
 interface AuthButtonProps {

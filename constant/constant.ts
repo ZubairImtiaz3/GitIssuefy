@@ -1,3 +1,3 @@
-const REPOSITORIES_URL = 'https://api.github.com/search/repositories';
+const BASE_GITHUB_URL = 'https://api.github.com';
 
-export { REPOSITORIES_URL };
+export { BASE_GITHUB_URL };
