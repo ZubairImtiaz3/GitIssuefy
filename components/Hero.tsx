@@ -2,7 +2,7 @@ import { Compass, MoveRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { AuthButton } from "@/components/AuthButton";
-import { getLoggedInUser } from "@/lib/server/appwrite";
+import { getLoggedInUser } from "@/lib/db/user";
 
 export const Hero = async () => {
   const user = await getLoggedInUser();

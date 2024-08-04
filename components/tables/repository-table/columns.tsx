@@ -3,6 +3,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
 
+interface Patient {}
+
 export const columns: ColumnDef<Patient>[] = [
   {
     id: "select",
@@ -24,7 +26,7 @@ export const columns: ColumnDef<Patient>[] = [
     enableHiding: false,
   },
   {
-    accessorFn: (row) => `${row.first_name} ${row.last_name}`,
+    accessorFn: (row) => ``,
     header: "NAME",
   },
   {

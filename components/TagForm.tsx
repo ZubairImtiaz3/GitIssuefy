@@ -15,6 +15,7 @@ type TagFormProps = {
   setValue: UseFormSetValue<FieldValues>;
   selectedRepo: string | null;
   githubAuthToken: string | undefined;
+  disabled: boolean;
 };
 
 function TagForm({
@@ -22,6 +23,7 @@ function TagForm({
   setValue,
   selectedRepo,
   githubAuthToken,
+  disabled,
 }: TagFormProps) {
   const [tags, setTags] = useState<Tag[]>([]);
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
@@ -42,7 +44,7 @@ function TagForm({
       // Tag exists, Do Nothing
     } catch (error) {
       // Remove  Invalid Tag
-      setTags((prevTags) => prevTags.filter((tag) => tag.text !== newTagName)); //Todo: Notify User & FIx Duplicate Incorrect In Submission
+      setTags((prevTags) => prevTags.filter((tag) => tag.text !== newTagName)); //Todo: Notify User & Fix Duplicate Incorrect In Submission
     }
   };
 
@@ -77,7 +79,7 @@ function TagForm({
               setActiveTagIndex={setActiveTagIndex}
               onTagAdd={handleTagAdd}
               textCase={"lowercase"}
-              disabled={!selectedRepo}
+              disabled={!selectedRepo || disabled}
               {...field}
             />
           )}

@@ -1,3 +1,4 @@
+import { updateOrCreateUser } from "@/lib/db/user";
 import { createAdminClient } from "@/lib/server/appwrite";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -19,6 +20,9 @@ export async function GET(request: NextRequest) {
         sameSite: "strict",
         secure: true,
     });
+
+    // Create or update the user in the users collection
+    await updateOrCreateUser();
 
     return NextResponse.redirect(`${request.nextUrl.origin}/dashboard`);
 }

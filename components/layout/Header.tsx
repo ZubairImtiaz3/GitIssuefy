@@ -11,16 +11,13 @@ import {
 import {
   Menu,
   Link,
-  Package2,
   Home,
   ShoppingCart,
   Package,
   LineChart,
-  Search,
   CircleUser,
   Users,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -29,7 +26,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { SignOutUser } from "@/lib/server/appwrite";
+import { SignOutUser } from "@/lib/db/user";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 

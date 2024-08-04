@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { getLoggedInUser } from '@/lib/server/appwrite';
+import { getLoggedInUser } from '@/lib/db/user';
 
 export async function middleware(request: NextRequest) {
     const user = await getLoggedInUser();

@@ -14,7 +14,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 
-export const CellAction: React.FC<CellActionProps> = ({ data }) => {
+export const CellAction = ({ data }: any) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();

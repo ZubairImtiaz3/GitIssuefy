@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddRepositoryModal from "@/components/AddRepoModal";
-import { getGithubIdentity } from "@/lib/server/appwrite";
+import { getGithubIdentity } from "@/lib/db/user";
 
 export default async function Dashboard() {
   const identity = await getGithubIdentity();

@@ -1,5 +1,5 @@
 "use server";
-import { Client, Account, Query } from "node-appwrite";
+import { Client, Account, Databases } from "node-appwrite";
 import { cookies } from "next/headers";
 
 export async function createSessionClient() {
@@ -18,6 +18,9 @@ export async function createSessionClient() {
         get account() {
             return new Account(client);
         },
+        get databases() {
+            return new Databases(client);
+        },
     };
 }
 
@@ -31,40 +34,8 @@ export async function createAdminClient() {
         get account() {
             return new Account(client);
         },
+        get databases() {
+            return new Databases(client);
+        },
     };
-}
-
-export async function getLoggedInUser() {
-    try {
-        const { account } = await createSessionClient();
-        return await account.get();
-    } catch (error) {
-        return null;
-    }
-}
-
-export async function SignOutUser() {
-    try {
-        const { account } = await createSessionClient();
-        cookies().delete("my-custom-session");
-        await account.deleteSession("current");
-        return null;
-    } catch (error) {
-        console.error(error);
-        return error;
-    }
-}
-
-export async function getGithubIdentity() {
-    try {
-        const { account } = await createSessionClient();
-        const identities = await account.listIdentities([
-            Query.equal('provider', 'github')
-        ]);
-
-        return identities.identities[0];
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
 }

@@ -32,6 +32,8 @@ import {
 } from "@/components/ui/popover";
 import { BASE_GITHUB_URL } from "@/constant/constant";
 import TagForm from "@/components/TagForm";
+import { watchRepository } from "@/lib/db/repo";
+import { toast } from "@/components/ui/use-toast";
 
 type AddRepositoryModalProps = {
   githubAuthToken: string | undefined;
@@ -42,12 +44,58 @@ export default function AddRepositoryModal({
 }: AddRepositoryModalProps) {
   const { control, handleSubmit, setValue } = useForm();
   const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [selectedRepo, setSelectedRepo] = useState<string | null>(null);
   const [repos, setRepos] = useState<string[]>([]);
   const [query, setQuery] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (data: any) => {
-    console.log("Data", { ...data, repository: selectedRepo });
+  const onSubmit = async (data: any) => {
+    if (!selectedRepo) {
+      toast({
+        title: "No repository selected.",
+        description: "Please select a repository to watch.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!data.labels || data.labels.length === 0) {
+      toast({
+        title: "No labels selected.",
+        description: "Please enter at least one label.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const result = await watchRepository(data.labels, selectedRepo);
+      if (result?.error) {
+        toast({
+          title: "Something Went Wrong",
+          description: result.error,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: result?.message,
+        });
+        setOpenModal(false);
+      }
+    } catch (error) {
+      console.error("Error starting to watch repository:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -77,7 +125,7 @@ export default function AddRepositoryModal({
   }, [query, repos, githubAuthToken]);
 
   return (
-    <Credenza>
+    <Credenza open={openModal} onOpenChange={setOpenModal}>
       <CredenzaTrigger asChild>
         <Button>Watch New Repository</Button>
       </CredenzaTrigger>
@@ -97,7 +145,7 @@ export default function AddRepositoryModal({
                   Repository
                 </Label>
                 <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
+                  <PopoverTrigger disabled={loading} asChild>
                     <Button variant="outline" className="w-full justify-start">
                       {selectedRepo ? (
                         <>{selectedRepo}</>
@@ -135,6 +183,7 @@ export default function AddRepositoryModal({
                 </Popover>
               </div>
               <TagForm
+                disabled={loading}
                 control={control}
                 setValue={setValue}
                 githubAuthToken={githubAuthToken}
@@ -144,9 +193,13 @@ export default function AddRepositoryModal({
           </CredenzaBody>
           <CredenzaFooter>
             <CredenzaClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button disabled={loading} variant="outline">
+                Cancel
+              </Button>
             </CredenzaClose>
-            <Button type="submit">Start Watching</Button>
+            <Button disabled={loading} type="submit">
+              Start Watching
+            </Button>
           </CredenzaFooter>
         </form>
       </CredenzaContent>
