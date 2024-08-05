@@ -23,13 +23,13 @@ export const AuthButton = ({ user, provider }: AuthButtonProps) => {
       if (!error) {
         if (provider === "github") {
           toast({
-            title: "Successfully logged in.",
-            description: "Redirecting to your Dashboard.",
+            title: "Please Wait...",
+            description: "We're logging you in.",
           });
         } else if (provider === "discord") {
           toast({
-            title: "Connected successfully.",
-            description: "Your Discord account is now connected.",
+            title: "Just a min...",
+            description: "We're connecting your Discord account.",
           });
         }
       } else {

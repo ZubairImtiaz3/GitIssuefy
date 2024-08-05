@@ -18,13 +18,13 @@ export const Hero = async () => {
           </div>
           <div className="flex gap-4 flex-col">
             <h1 className="text-5xl md:text-7xl max-w-2xl tracking-tighter text-center font-regular">
-              This is the start of something new
+              Stay Updated, Contribute Faster
             </h1>
             <p className="text-lg md:text-xl leading-relaxed tracking-tight text-muted-foreground max-w-2xl text-center">
-              Managing a small business today is already tough. Avoid further
-              complications by ditching outdated, tedious trade methods. Our
-              goal is to streamline SMB trade, making it easier and faster than
-              ever.
+              Connect your GitHub and Discord to track your favorite open-source
+              projects. Get notified only when new issues arise with your chosen
+              labels, so you can be the first to contribute and make a
+              difference.
             </p>
           </div>
           <div className="flex flex-row gap-3 flex-wrap-reverse justify-center items-center">

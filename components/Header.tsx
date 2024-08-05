@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { Github } from "lucide-react";
+import Link from "next/link";
 
 export const Header = () => {
   return (
@@ -36,11 +37,16 @@ export const Header = () => {
             </a>
           </div>
           <div className="border-r hidden md:inline"></div>
-          <Button className="hidden sm:block">
-            <span className="flex gap-2">
-              Star on Github <Github className="h-5 w-5" />
-            </span>
-          </Button>
+          <Link
+            href={"https://github.com/ZubairImtiaz3/GitIssuefy"}
+            target="_blank"
+          >
+            <Button className="hidden sm:block">
+              <span className="flex gap-2">
+                Star on Github <Github className="h-5 w-5" />
+              </span>
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
