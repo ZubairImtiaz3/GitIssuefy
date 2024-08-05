@@ -31,7 +31,7 @@ export const Hero = async () => {
             <Button size="lg" className="gap-4" variant="outline">
               Explore Features <Compass className="h-[18px] w-[18px]" />
             </Button>
-            <AuthButton user={user} />
+            <AuthButton provider="github" user={user} />
           </div>
         </div>
       </div>

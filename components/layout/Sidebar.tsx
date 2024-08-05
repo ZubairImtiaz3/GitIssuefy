@@ -1,13 +1,7 @@
-import {
-  Bell,
-  Home,
-  LineChart,
-  Package,
-  ShoppingCart,
-  Users,
-} from "lucide-react";
+import { Bell, Home } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AuthButton } from "@/components/AuthButton";
 import {
   Card,
   CardContent,
@@ -15,8 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getUserProfile } from "@/lib/db/user";
 
-const Sidebar = () => {
+const Sidebar = async () => {
+  const response = await getUserProfile();
+  const profile = response.documents[0];
+
   return (
     <div className="hidden border-r bg-muted/40 md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
@@ -43,16 +41,36 @@ const Sidebar = () => {
         <div className="mt-auto p-4">
           <Card x-chunk="dashboard-02-chunk-0">
             <CardHeader className="p-2 pt-0 md:p-4">
-              <CardTitle>Connect Your Discord</CardTitle>
-              <CardDescription>
-                Link your Discord account to start receiving notifications about
-                your watched repositories
-              </CardDescription>
+              {profile.discord_id ? (
+                <>
+                  <CardTitle>Connected to Discord</CardTitle>
+                  <CardDescription>
+                    To ensure you receive notifications, you must first invite
+                    GitIssuefy bot to your server.
+                  </CardDescription>
+                </>
+              ) : (
+                <>
+                  <CardTitle>Connect Your Discord</CardTitle>
+                  <CardDescription>
+                    Link your Discord account to start receiving notifications
+                    about your watched repositories.
+                  </CardDescription>
+                </>
+              )}
             </CardHeader>
             <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-              <Button size="sm" className="w-full">
-                Connect
-              </Button>
+              {profile.discord_id ? (
+                <Link
+                  href={
+                    "https://discord.com/oauth2/authorize?client_id=1269794139570962594&permissions=75776&integration_type=0&scope=bot"
+                  }
+                >
+                  <Button className="w-full">Invite Bot</Button>
+                </Link>
+              ) : (
+                <AuthButton provider="discord" />
+              )}
             </CardContent>
           </Card>
         </div>

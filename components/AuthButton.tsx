@@ -3,38 +3,47 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MoveRight } from "lucide-react";
-import { signUpWithGithub } from "@/lib/server/oauth";
+import { signUpWithProvider } from "@/lib/server/oauth";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 
 interface AuthButtonProps {
-  user: object | null;
+  user?: object | null;
+  provider: "github" | "discord";
 }
 
-export const AuthButton = ({ user }: AuthButtonProps) => {
+export const AuthButton = ({ user, provider }: AuthButtonProps) => {
   const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
     setLoading(true);
     try {
-      const error = await signUpWithGithub();
+      const error = await signUpWithProvider(provider);
+
       if (!error) {
-        toast({
-          title: "Successfully logged in.",
-          description: "Redirecting to your Dashboard.",
-        });
+        if (provider === "github") {
+          toast({
+            title: "Successfully logged in.",
+            description: "Redirecting to your Dashboard.",
+          });
+        } else if (provider === "discord") {
+          toast({
+            title: "Connected successfully.",
+            description: "Your Discord account is now connected.",
+          });
+        }
       } else {
         toast({
           variant: "destructive",
           title: "Sign-in Error",
-          description: "An unexpected error occurred during sign-out:",
+          description: "An unexpected error occurred during sign-in:",
         });
       }
     } catch (error) {
       console.error("An unexpected error occurred during sign-in:", error);
       toast({
         variant: "destructive",
-        title: "Sign-out Error",
+        title: "Sign-in Error",
         description: "An unexpected error occurred during sign-in.",
       });
     }
@@ -54,9 +63,15 @@ export const AuthButton = ({ user }: AuthButtonProps) => {
           disabled={loading}
           type="submit"
           size="lg"
-          className="gap-4"
+          className="gap-4 w-full"
         >
-          Continue With Github <MoveRight className="w-4 h-4" />
+          {provider === "github" ? (
+            <>
+              Continue With GitHub <MoveRight className="w-4 h-4" />
+            </>
+          ) : (
+            "Connect"
+          )}
         </Button>
       )}
     </div>

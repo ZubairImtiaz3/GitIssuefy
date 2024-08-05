@@ -27,11 +27,11 @@ export async function SignOutUser() {
     }
 }
 
-export async function getGithubIdentity() {
+export async function getUserIdentity(provider: "github" | "discord") {
     try {
         const { account } = await createSessionClient();
         const identities = await account.listIdentities([
-            Query.equal('provider', 'github')
+            Query.equal('provider', provider)
         ]);
 
         return identities.identities[0];
@@ -51,7 +51,7 @@ export const getUserProfile = async (query?: any[]) => {
 
 export const updateOrCreateUser = async () => {
     try {
-        const loggedInUser = await getGithubIdentity();
+        const loggedInUser = await getUserIdentity('github');
 
         if (loggedInUser) {
             const { userId, providerAccessToken, providerAccessTokenExpiry, providerEmail } = loggedInUser;
@@ -97,5 +97,26 @@ export const updateOrCreateUser = async () => {
         }
     } catch (error) {
         console.error("Error creating or updating user:", error);
+    }
+};
+
+export const updateUserDiscordId = async () => {
+    try {
+        const loggedInUser = await getUserIdentity('discord');
+
+        if (loggedInUser) {
+            const { providerUid, userId } = loggedInUser;
+
+            await updateDocument(
+                process.env.NEXT_GITISSUEFYDB_ID!,
+                process.env.NEXT_USER_COLLECTION_ID!,
+                userId,
+                {
+                    discord_id: providerUid,
+                }
+            );
+        }
+    } catch (error) {
+        console.error("Error creating or updating user discord Id:", error);
     }
 };

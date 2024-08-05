@@ -1,4 +1,4 @@
-import { updateOrCreateUser } from "@/lib/db/user";
+import { updateOrCreateUser, updateUserDiscordId } from "@/lib/db/user";
 import { createAdminClient } from "@/lib/server/appwrite";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -6,9 +6,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
     const userId = request.nextUrl.searchParams.get("userId");
     const secret = request.nextUrl.searchParams.get("secret");
+    const provider = request.nextUrl.searchParams.get("provider");
 
-    if (!userId || !secret) {
-        return NextResponse.redirect(`${request.nextUrl.origin}/error?message=Missing userId or secret`);
+    if (!userId || !secret || !provider) {
+        return NextResponse.redirect(`${request.nextUrl.origin}/error?message=Missing userId, secret, or provider`);
     }
 
     const { account } = await createAdminClient();
@@ -17,12 +18,17 @@ export async function GET(request: NextRequest) {
     cookies().set("my-custom-session", session.secret, {
         path: "/",
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: provider === 'discord' ? 'lax' : 'strict',
         secure: true,
     });
 
-    // Create or update the user in the users collection
-    await updateOrCreateUser();
+    if (provider === "github") {
+        await updateOrCreateUser();
+    } else if (provider === "discord") {
+        await updateUserDiscordId();
+    } else {
+        return NextResponse.redirect(`${request.nextUrl.origin}/error?message=Unknown provider`);
+    }
 
     return NextResponse.redirect(`${request.nextUrl.origin}/dashboard`);
 }
