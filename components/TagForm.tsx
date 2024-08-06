@@ -5,8 +5,6 @@ import {
   FieldValues,
   UseFormSetValue,
 } from "react-hook-form";
-import axios from "axios";
-import { BASE_GITHUB_URL } from "@/constant/constant";
 import { Tag, TagInput } from "emblor";
 import { Label } from "@/components/ui/label";
 
@@ -14,39 +12,12 @@ type TagFormProps = {
   control: Control<FieldValues>;
   setValue: UseFormSetValue<FieldValues>;
   selectedRepo: string | null;
-  githubAuthToken: string | undefined;
   disabled: boolean;
 };
 
-function TagForm({
-  control,
-  setValue,
-  selectedRepo,
-  githubAuthToken,
-  disabled,
-}: TagFormProps) {
+function TagForm({ control, setValue, selectedRepo, disabled }: TagFormProps) {
   const [tags, setTags] = useState<Tag[]>([]);
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
-
-  const handleTagAdd = async (newTagName: string) => {
-    if (!selectedRepo) return;
-
-    try {
-      const [owner, repo] = selectedRepo.split("/");
-      await axios.get(
-        `${BASE_GITHUB_URL}/repos/${owner}/${repo}/labels/${newTagName}`,
-        {
-          headers: {
-            Authorization: `token ${githubAuthToken}`,
-          },
-        }
-      );
-      // Tag exists, Do Nothing
-    } catch (error) {
-      // Remove  Invalid Tag
-      setTags((prevTags) => prevTags.filter((tag) => tag.text !== newTagName)); //Todo: Notify User & Fix Duplicate Incorrect In Submission
-    }
-  };
 
   return (
     <>
@@ -77,7 +48,6 @@ function TagForm({
               className="sm:min-w-[450px]"
               activeTagIndex={activeTagIndex}
               setActiveTagIndex={setActiveTagIndex}
-              onTagAdd={handleTagAdd}
               textCase={"lowercase"}
               disabled={!selectedRepo || disabled}
               {...field}

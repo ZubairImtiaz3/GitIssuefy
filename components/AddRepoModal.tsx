@@ -53,15 +53,6 @@ export default function AddRepositoryModal({
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data: any) => {
-    if (!selectedRepo) {
-      toast({
-        title: "No repository selected.",
-        description: "Please select a repository to watch.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     if (!data.labels || data.labels.length === 0) {
       toast({
         title: "No labels selected.",
@@ -74,7 +65,48 @@ export default function AddRepositoryModal({
     setLoading(true);
 
     try {
-      const result = await watchRepository(data.labels, selectedRepo);
+      const [owner, repo] = selectedRepo!.split("/");
+
+      // Check if labels exists in repository
+      const isValidLabel = async (labelText: string) => {
+        try {
+          await axios.get(
+            `${BASE_GITHUB_URL}/repos/${owner}/${repo}/labels/${encodeURIComponent(
+              labelText
+            )}`,
+            {
+              headers: {
+                Authorization: `token ${githubAuthToken}`,
+              },
+            }
+          );
+          return true;
+        } catch {
+          return false;
+        }
+      };
+
+      // Validate each label using its text property
+      const invalidLabels: string[] = [];
+      for (const label of data.labels) {
+        const valid = await isValidLabel(label.text);
+        if (!valid) {
+          invalidLabels.push(label.text);
+        }
+      }
+
+      if (invalidLabels.length > 0) {
+        toast({
+          title: "Invalid Labels",
+          description: `The following labels are not available: ${invalidLabels.join(
+            ", "
+          )} in ${selectedRepo}`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const result = await watchRepository(data.labels, selectedRepo!);
       if (result?.error) {
         toast({
           title: "Something Went Wrong",
@@ -188,7 +220,6 @@ export default function AddRepositoryModal({
                 disabled={loading}
                 control={control}
                 setValue={setValue}
-                githubAuthToken={githubAuthToken}
                 selectedRepo={selectedRepo}
               />
             </div>
@@ -199,7 +230,7 @@ export default function AddRepositoryModal({
                 Cancel
               </Button>
             </CredenzaClose>
-            <Button disabled={loading} type="submit">
+            <Button disabled={loading || !selectedRepo} type="submit">
               Start Watching
             </Button>
           </CredenzaFooter>
