@@ -37,10 +37,12 @@ import { toast } from "@/components/ui/use-toast";
 
 type AddRepositoryModalProps = {
   githubAuthToken: string | undefined;
+  discordId: string | undefined;
 };
 
 export default function AddRepositoryModal({
   githubAuthToken,
+  discordId,
 }: AddRepositoryModalProps) {
   const { control, handleSubmit, setValue } = useForm();
   const [open, setOpen] = useState(false);
@@ -127,7 +129,7 @@ export default function AddRepositoryModal({
   return (
     <Credenza open={openModal} onOpenChange={setOpenModal}>
       <CredenzaTrigger asChild>
-        <Button>Watch New Repository</Button>
+        <Button disabled={!discordId}>Watch New Repository</Button>
       </CredenzaTrigger>
       <CredenzaContent>
         <CredenzaHeader>

@@ -3,7 +3,7 @@ import { createSessionClient } from "@/lib/server/appwrite";
 import { cookies } from "next/headers";
 import { Permission, Query, Role } from "node-appwrite";
 import { listDocuments, createDocument, updateDocument } from "@/lib/db/utils";
-
+import { getUserRepos, getUserSentNotifications } from "@/lib/db/dashboard";
 
 export async function getLoggedInUser() {
     try {
@@ -118,5 +118,24 @@ export const updateUserDiscordId = async () => {
         }
     } catch (error) {
         console.error("Error creating or updating user discord Id:", error);
+    }
+};
+
+export const userDashboard = async (query?: any[]) => {
+    try {
+        const [repos, notifications] = await Promise.all([
+            getUserRepos(query),
+            getUserSentNotifications(query)
+        ]);
+
+        const totalRepos = repos?.total
+        const totalNotifications = notifications?.total
+
+        return {
+            totalRepos,
+            totalNotifications
+        };
+    } catch (error) {
+        console.error("Error fetching dashboard analytics:", error);
     }
 };

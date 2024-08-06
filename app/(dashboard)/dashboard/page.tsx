@@ -8,11 +8,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddRepositoryModal from "@/components/AddRepoModal";
-import { getUserIdentity } from "@/lib/db/user";
+import { userDashboard, getUserIdentity, getUserProfile } from "@/lib/db/user";
 
 export default async function Dashboard() {
-  const identity = await getUserIdentity("github");
+  const [identity, profile, dashboard] = await Promise.all([
+    getUserIdentity("github"),
+    getUserProfile(),
+    userDashboard(),
+  ]);
+
   const providerToken = identity?.providerAccessToken;
+  const discordId = profile?.documents[0].discord_id;
 
   return (
     <>
@@ -21,12 +27,16 @@ export default async function Dashboard() {
           <CardHeader className="pb-3">
             <CardTitle>Track Issues</CardTitle>
             <CardDescription className="max-w-lg text-balance leading-relaxed">
-              Stay informed on your favorite open-source projects by watching
-              repositories issues with your labels of interest.
+              {!discordId && <b>Connect your discord.&nbsp;</b>}Stay informed on
+              your favorite open-source projects by watching repositories issues
+              with your labels of interest.
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <AddRepositoryModal githubAuthToken={providerToken} />
+            <AddRepositoryModal
+              githubAuthToken={providerToken}
+              discordId={discordId}
+            />
           </CardFooter>
         </Card>
 
@@ -34,7 +44,9 @@ export default async function Dashboard() {
           <Card className="grow">
             <CardHeader className="pb-2">
               <CardDescription>Watched Repositories</CardDescription>
-              <CardTitle className="text-4xl">12</CardTitle>
+              <CardTitle className="text-4xl">
+                {dashboard?.totalRepos}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
@@ -46,7 +58,9 @@ export default async function Dashboard() {
           <Card className="grow">
             <CardHeader className="pb-2">
               <CardDescription>Issues Notified</CardDescription>
-              <CardTitle className="text-4xl">47</CardTitle>
+              <CardTitle className="text-4xl">
+                {dashboard?.totalNotifications}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
