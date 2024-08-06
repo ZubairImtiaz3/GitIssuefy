@@ -17,7 +17,7 @@ const Sidebar = async () => {
 
   return (
     <div className="hidden border-r bg-muted/40 md:block">
-      <div className="flex h-full max-h-screen flex-col gap-2">
+      <div className="flex h-full flex-col gap-2">
         <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <span className="">GitIssuefy</span>
@@ -38,7 +38,7 @@ const Sidebar = async () => {
             </Link>
           </nav>
         </div>
-        <div className="mt-auto p-4">
+        <div className="mt-auto p-4 sticky bottom-2">
           <Card x-chunk="dashboard-02-chunk-0">
             <CardHeader className="p-2 pt-0 md:p-4">
               {profile.discord_id ? (
