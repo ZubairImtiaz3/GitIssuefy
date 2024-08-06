@@ -2,6 +2,7 @@
 import { getLoggedInUser } from "@/lib/db/user";
 import { ID, Permission, Query, Role } from "node-appwrite";
 import { listDocuments, createDocument } from "./utils";
+import { revalidatePath } from "next/cache";
 
 export const getWatchRepositories = async (query?: any[]) => {
     return listDocuments(
@@ -53,6 +54,8 @@ export const watchRepository = async (
                 Permission.delete(Role.user(userId))
             ]
         );
+
+        revalidatePath('/dashboard')
 
         return { message: "Repository successfully added to your watch list." };
 
