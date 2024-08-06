@@ -125,7 +125,7 @@ export const userDashboard = async (query?: any[]) => {
     try {
         const [repos, notifications] = await Promise.all([
             getUserRepos(query),
-            getUserSentNotifications(query)
+            getUserSentNotifications([Query.equal('status', 'sent')])
         ]);
 
         const totalRepos = repos?.total
