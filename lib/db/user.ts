@@ -132,6 +132,7 @@ export const userDashboard = async (query?: any[]) => {
         const totalNotifications = notifications?.total
 
         return {
+            repos,
             totalRepos,
             totalNotifications
         };

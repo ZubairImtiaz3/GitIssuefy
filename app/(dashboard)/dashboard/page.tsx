@@ -20,6 +20,15 @@ export default async function Dashboard() {
   const providerToken = identity?.providerAccessToken;
   const discordId = profile?.documents[0].discord_id;
 
+  const watchedRepos = dashboard?.repos?.documents.map((doc) => ({
+    $id: doc.$id,
+    user_id: doc.user_id,
+    labels: doc.labels,
+    watched_repo: doc.watched_repo,
+    last_checked: doc.last_checked,
+    status: doc.status,
+  }));
+
   return (
     <>
       <div className="flex gap-4 flex-wrap">
@@ -72,7 +81,7 @@ export default async function Dashboard() {
       </div>
 
       <div>
-        <WatchRepoTable />
+        <WatchRepoTable data={watchedRepos || []} />
       </div>
     </>
   );

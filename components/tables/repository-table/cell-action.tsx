@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Edit, MoreHorizontal, Power, Trash } from "lucide-react";
 
 export const CellAction = ({ data }: any) => {
   const [loading, setLoading] = useState(false);
@@ -61,6 +61,9 @@ export const CellAction = ({ data }: any) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
+          <DropdownMenuItem onClick={() => setOpen(true)}>
+            <Power className="mr-2 h-4 w-4" /> Deactivate
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => router.push(`/dashboard/patients/${data.id}`)}
           >

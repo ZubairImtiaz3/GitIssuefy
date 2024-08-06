@@ -2,10 +2,44 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { WatchedRepo } from "@/components/tables/repository-table/watch-repo-table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import dayjs from "dayjs";
 
-interface Patient {}
+interface LabelsCellProps {
+  value: string[];
+}
 
-export const columns: ColumnDef<Patient>[] = [
+const LabelsCell = ({ value }: LabelsCellProps) => {
+  const showTooltip = value.length > 2;
+  const truncatedLabels =
+    value.length > 2 ? value.slice(0, 2).join(", ") + "..." : value.join(", ");
+
+  return (
+    <TooltipProvider>
+      {showTooltip ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="truncate cursor-pointer">{truncatedLabels}</span>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{value.join(", ")}</p>
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        <span>{truncatedLabels}</span>
+      )}
+    </TooltipProvider>
+  );
+};
+
+export const columns: ColumnDef<WatchedRepo>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -26,16 +60,32 @@ export const columns: ColumnDef<Patient>[] = [
     enableHiding: false,
   },
   {
-    accessorFn: (row) => ``,
-    header: "NAME",
+    accessorKey: "watched_repo",
+    header: "Repository",
   },
   {
-    accessorKey: "gender",
-    header: "GENDER",
+    accessorKey: "labels",
+    header: "Labels",
+    cell: (info) => <LabelsCell value={info.getValue() as string[]} />,
   },
   {
-    accessorKey: "phone_number",
-    header: "PHONE NUMBER",
+    accessorKey: "last_checked",
+    header: "Last Checked",
+    cell: ({ row }) => {
+      const date = row.original.last_checked;
+      return date ? dayjs(new Date(date)).format("MM/DD/YYYY HH:mm:ss") : "N/A";
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      return (
+        <Badge className="" variant="outline">
+          {row.original.status}
+        </Badge>
+      );
+    },
   },
   {
     id: "actions",

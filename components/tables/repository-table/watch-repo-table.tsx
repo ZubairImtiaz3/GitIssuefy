@@ -8,7 +8,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export const WatchRepoTable = () => {
+export interface WatchedRepo {
+  user_id: string;
+  labels: string[];
+  watched_repo: string;
+  last_checked: string;
+  status: string;
+  $id: string;
+}
+
+interface WatchRepoTableProps {
+  data: WatchedRepo[];
+}
+
+export const WatchRepoTable = ({ data }: WatchRepoTableProps) => {
   return (
     <>
       <Card>
@@ -17,7 +30,7 @@ export const WatchRepoTable = () => {
           <CardDescription>List of your watched repositories.</CardDescription>
         </CardHeader>
         <CardContent>
-          <DataTable searchKey="NAME" columns={columns} data={[]} />
+          <DataTable searchKey="NAME" columns={columns} data={data} />
         </CardContent>
       </Card>
     </>
