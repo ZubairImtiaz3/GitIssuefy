@@ -1,6 +1,6 @@
 "use server";
 import { getLoggedInUser } from "@/lib/db/user";
-import { ID, Permission, Query, Role } from "node-appwrite";
+import { ID, Query, } from "node-appwrite";
 import { listDocuments, createDocument } from "./utils";
 import { revalidatePath } from "next/cache";
 
@@ -47,12 +47,6 @@ export const watchRepository = async (
                 labels: labelStrings,
                 watched_repo: watched_repo,
             },
-            [
-                Permission.write(Role.user(userId)),
-                Permission.read(Role.user(userId)),
-                Permission.update(Role.user(userId)),
-                Permission.delete(Role.user(userId))
-            ]
         );
 
         revalidatePath('/dashboard')

@@ -1,7 +1,7 @@
 "use server";
 import { createSessionClient } from "@/lib/server/appwrite";
 import { cookies } from "next/headers";
-import { Permission, Query, Role } from "node-appwrite";
+import { ID, Query } from "node-appwrite";
 import { listDocuments, createDocument, updateDocument } from "@/lib/db/utils";
 import { getUserRepos, getUserSentNotifications } from "@/lib/db/dashboard";
 
@@ -79,19 +79,13 @@ export const updateOrCreateUser = async () => {
                 await createDocument(
                     process.env.NEXT_GITISSUEFYDB_ID!,
                     process.env.NEXT_USER_COLLECTION_ID!,
-                    userId,
+                    ID.custom(userId),
                     {
                         github_access_token: providerAccessToken,
                         email: providerEmail,
                         username: user?.name,
                         github_token_expiry: providerAccessTokenExpiry,
                     },
-                    [
-                        Permission.write(Role.user(userId)),
-                        Permission.read(Role.user(userId)),
-                        Permission.update(Role.user(userId)),
-                        Permission.delete(Role.user(userId))
-                    ]
                 );
             }
         }

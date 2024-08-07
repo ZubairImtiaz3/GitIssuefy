@@ -11,10 +11,10 @@ export const listDocuments = async (databaseId: string, collectionId: string, qu
     }
 };
 
-export const createDocument = async (databaseId: string, collectionId: string, documentId: string, data: any, permissions: string[]) => {
+export const createDocument = async (databaseId: string, collectionId: string, documentId: string, data: any,) => {
     try {
         const { databases } = await createSessionClient();
-        const result = await databases.createDocument(databaseId, collectionId, documentId, data, permissions);
+        const result = await databases.createDocument(databaseId, collectionId, documentId, data);
         return result;
     } catch (error) {
         console.error("Error creating document:", error);
