@@ -44,13 +44,16 @@ export default function AddRepositoryModal({
   githubAuthToken,
   discordId,
 }: AddRepositoryModalProps) {
-  const { control, handleSubmit, setValue } = useForm();
+  const { control, handleSubmit, setValue, watch } = useForm();
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [selectedRepo, setSelectedRepo] = useState<string | null>(null);
   const [repos, setRepos] = useState<string[]>([]);
   const [query, setQuery] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [hasLabels, setHasLabels] = useState(false);
+
+  const labels = watch("labels");
 
   const onSubmit = async (data: any) => {
     if (!data.labels || data.labels.length === 0) {
@@ -134,7 +137,7 @@ export default function AddRepositoryModal({
 
   useEffect(() => {
     const debouncedSearch = debounce(async () => {
-      if (query) {
+      if (query && !selectedRepo) {
         try {
           const response = await axios.get(
             `${BASE_GITHUB_URL}/search/repositories?q=${query}`,
@@ -156,7 +159,12 @@ export default function AddRepositoryModal({
     debouncedSearch();
 
     return debouncedSearch.cancel;
-  }, [query, repos, githubAuthToken]);
+  }, [query, githubAuthToken, selectedRepo]);
+
+  useEffect(() => {
+    // Set hasLabels to true if there are labels present, false otherwise
+    setHasLabels(labels && labels.length > 0);
+  }, [labels]);
 
   return (
     <Credenza open={openModal} onOpenChange={setOpenModal}>
@@ -230,7 +238,7 @@ export default function AddRepositoryModal({
                 Cancel
               </Button>
             </CredenzaClose>
-            <Button disabled={loading || !selectedRepo} type="submit">
+            <Button disabled={loading || !hasLabels} type="submit">
               Start Watching
             </Button>
           </CredenzaFooter>
