@@ -32,3 +32,14 @@ export const updateDocument = async (databaseId: string, collectionId: string, d
         throw error;
     }
 };
+
+export const deleteDocument = async (databaseId: string, collectionId: string, documentId: string) => {
+    try {
+        const { databases } = await createSessionClient();
+        const result = await databases.deleteDocument(databaseId, collectionId, documentId);
+        return result;
+    } catch (error) {
+        console.error("Error deleting document:", error);
+        throw error;
+    }
+};

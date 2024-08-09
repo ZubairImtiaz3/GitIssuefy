@@ -12,7 +12,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { Edit, MoreHorizontal, Power, Trash } from "lucide-react";
 import { WatchedRepo } from "@/components/tables/repository-table/watch-repo-table";
-import { updateRepositoryStatus } from "@/lib/db/repo";
+import { updateRepositoryStatus, deleteRepository } from "@/lib/db/repo";
 
 interface CellActionProps {
   data: WatchedRepo;
@@ -21,6 +21,9 @@ interface CellActionProps {
 export const CellAction = ({ data }: CellActionProps) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [actionType, setActionType] = useState<
+    "activate" | "deactivate" | "delete" | null
+  >(null);
 
   const onConfirm = async () => {
     setOpen(true);
@@ -28,13 +31,22 @@ export const CellAction = ({ data }: CellActionProps) => {
     try {
       setLoading(true);
 
-      const newStatus = data.status === "active" ? "deactivate" : "active";
-      const result = await updateRepositoryStatus(data.$id, newStatus);
+      if (actionType === "activate" || actionType === "deactivate") {
+        const newStatus = actionType === "activate" ? "active" : "deactivate";
+        const result = await updateRepositoryStatus(data.$id, newStatus);
 
-      toast({
-        title: "Success",
-        description: result?.message,
-      });
+        toast({
+          title: "Success",
+          description: result?.message,
+        });
+      } else if (actionType === "delete") {
+        const result = await deleteRepository(data.$id);
+
+        toast({
+          title: "Success",
+          description: result?.message,
+        });
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -44,6 +56,7 @@ export const CellAction = ({ data }: CellActionProps) => {
     } finally {
       setLoading(false);
       setOpen(false);
+      setActionType(null);
     }
   };
 
@@ -64,8 +77,14 @@ export const CellAction = ({ data }: CellActionProps) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          <DropdownMenuItem
+            onClick={() => {
+              setActionType(
+                data.status === "active" ? "deactivate" : "activate"
+              );
+              setOpen(true);
+            }}
+          >
             <Power className="mr-2 h-4 w-4" />
             {data?.status === "active" ? (
               <span>Deactivate</span>
@@ -76,7 +95,12 @@ export const CellAction = ({ data }: CellActionProps) => {
           <DropdownMenuItem>
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          <DropdownMenuItem
+            onClick={() => {
+              setActionType("delete");
+              setOpen(true);
+            }}
+          >
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

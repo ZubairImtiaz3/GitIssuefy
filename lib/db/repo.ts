@@ -1,7 +1,7 @@
 "use server";
 import { getLoggedInUser } from "@/lib/db/user";
 import { ID, Query, } from "node-appwrite";
-import { listDocuments, createDocument, updateDocument } from "./utils";
+import { listDocuments, createDocument, updateDocument, deleteDocument } from "./utils";
 import { revalidatePath } from "next/cache";
 
 export const getWatchRepositories = async (query?: any[]) => {
@@ -78,5 +78,24 @@ export const updateRepositoryStatus = async (
 
     } catch (error) {
         console.error("Error updating repository status:", error);
+    }
+};
+
+export const deleteRepository = async (
+    id: string,
+) => {
+    try {
+        await deleteDocument(
+            process.env.NEXT_GITISSUEFYDB_ID!,
+            process.env.NEXT_WATCHED_REPOSITORIES_ID!,
+            id
+        );
+
+        revalidatePath('/dashboard');
+
+        return { message: `Repository successfully deleted.` };
+
+    } catch (error) {
+        console.error("Error deleting repository:", error);
     }
 };
