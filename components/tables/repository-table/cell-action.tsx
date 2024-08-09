@@ -1,7 +1,5 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-
 import { AlertModal } from "@/components/ui/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,34 +11,40 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
 import { Edit, MoreHorizontal, Power, Trash } from "lucide-react";
+import { WatchedRepo } from "@/components/tables/repository-table/watch-repo-table";
+import { updateRepositoryStatus } from "@/lib/db/repo";
 
-export const CellAction = ({ data }: any) => {
+interface CellActionProps {
+  data: WatchedRepo;
+}
+
+export const CellAction = ({ data }: CellActionProps) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const router = useRouter();
 
   const onConfirm = async () => {
-    // try {
-    //   setLoading(true);
-    //   const { error } = await supabase
-    //     .from("patients")
-    //     .delete()
-    //     .eq("id", data.id);
-    //   toast({
-    //     title: "Success",
-    //     description: "Patient record successfully deleted.",
-    //   });
-    //   router.refresh();
-    // } catch (error: any) {
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Uh oh! Something went wrong.",
-    //     description: "There was a problem with your request.",
-    //   });
-    // } finally {
-    //   setLoading(false);
-    //   setOpen(false);
-    // }
+    setOpen(true);
+
+    try {
+      setLoading(true);
+
+      const newStatus = data.status === "active" ? "deactivate" : "active";
+      const result = await updateRepositoryStatus(data.$id, newStatus);
+
+      toast({
+        title: "Success",
+        description: result?.message,
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: error.message,
+      });
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
   };
 
   return (
@@ -62,11 +66,14 @@ export const CellAction = ({ data }: any) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Power className="mr-2 h-4 w-4" /> Deactivate
+            <Power className="mr-2 h-4 w-4" />
+            {data?.status === "active" ? (
+              <span>Deactivate</span>
+            ) : (
+              <span>Activate</span>
+            )}
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/patients/${data.id}`)}
-          >
+          <DropdownMenuItem>
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>

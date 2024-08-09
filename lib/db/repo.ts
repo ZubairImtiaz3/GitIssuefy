@@ -1,7 +1,7 @@
 "use server";
 import { getLoggedInUser } from "@/lib/db/user";
 import { ID, Query, } from "node-appwrite";
-import { listDocuments, createDocument } from "./utils";
+import { listDocuments, createDocument, updateDocument } from "./utils";
 import { revalidatePath } from "next/cache";
 
 export const getWatchRepositories = async (query?: any[]) => {
@@ -55,5 +55,28 @@ export const watchRepository = async (
 
     } catch (error) {
         console.error("Error creating or updating user:", error);
+    }
+};
+
+export const updateRepositoryStatus = async (
+    id: string,
+    state: 'active' | 'deactivate'
+) => {
+    try {
+        await updateDocument(
+            process.env.NEXT_GITISSUEFYDB_ID!,
+            process.env.NEXT_WATCHED_REPOSITORIES_ID!,
+            id,
+            {
+                status: state,
+            },
+        );
+
+        revalidatePath('/dashboard');
+
+        return { message: `Repository status successfully updated to ${state}.` };
+
+    } catch (error) {
+        console.error("Error updating repository status:", error);
     }
 };
