@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Control,
   Controller,
@@ -13,10 +13,17 @@ type TagFormProps = {
   setValue: UseFormSetValue<FieldValues>;
   selectedRepo: string | null;
   disabled: boolean;
+  initialTags?: Tag[];
 };
 
-function TagForm({ control, setValue, selectedRepo, disabled }: TagFormProps) {
-  const [tags, setTags] = useState<Tag[]>([]);
+function TagForm({
+  control,
+  setValue,
+  selectedRepo,
+  disabled,
+  initialTags = [],
+}: TagFormProps) {
+  const [tags, setTags] = useState<Tag[]>(initialTags);
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
 
   return (

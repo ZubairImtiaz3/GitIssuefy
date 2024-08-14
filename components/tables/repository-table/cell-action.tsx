@@ -13,6 +13,8 @@ import { toast } from "@/components/ui/use-toast";
 import { Edit, MoreHorizontal, Power, Trash } from "lucide-react";
 import { WatchedRepo } from "@/components/tables/repository-table/watch-repo-table";
 import { updateRepositoryStatus, deleteRepository } from "@/lib/db/repo";
+import AddRepositoryModal from "@/components/AddRepoModal";
+import { getUserIdentity } from "@/lib/db/user";
 
 interface CellActionProps {
   data: WatchedRepo;
@@ -24,6 +26,10 @@ export const CellAction = ({ data }: CellActionProps) => {
   const [actionType, setActionType] = useState<
     "activate" | "deactivate" | "delete" | null
   >(null);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [githubAuthToken, setGithubAuthToken] = useState<string | undefined>(
+    undefined
+  );
 
   const onConfirm = async () => {
     setOpen(true);
@@ -60,6 +66,13 @@ export const CellAction = ({ data }: CellActionProps) => {
     }
   };
 
+  const handleUpdateClick = async () => {
+    setOpenUpdateModal(true);
+
+    const identity = await getUserIdentity("github");
+    setGithubAuthToken(identity?.providerAccessToken || undefined);
+  };
+
   return (
     <>
       <AlertModal
@@ -92,7 +105,7 @@ export const CellAction = ({ data }: CellActionProps) => {
               <span>Activate</span>
             )}
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleUpdateClick}>
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -105,6 +118,12 @@ export const CellAction = ({ data }: CellActionProps) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <AddRepositoryModal
+        githubAuthToken={githubAuthToken}
+        repoData={data}
+        propTrigger={openUpdateModal}
+        setPropTrigger={setOpenUpdateModal}
+      />
     </>
   );
 };

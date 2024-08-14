@@ -32,22 +32,31 @@ import {
 } from "@/components/ui/popover";
 import { BASE_GITHUB_URL } from "@/constant/constant";
 import TagForm from "@/components/TagForm";
-import { watchRepository } from "@/lib/db/repo";
+import { watchRepository, updateRepositoryLabels } from "@/lib/db/repo";
 import { toast } from "@/components/ui/use-toast";
+import { WatchedRepo } from "@/components/tables/repository-table/watch-repo-table";
 
 type AddRepositoryModalProps = {
-  githubAuthToken: string | undefined;
-  discordId: string | undefined;
+  githubAuthToken?: string | undefined;
+  discordId?: string | undefined;
+  repoData?: WatchedRepo;
+  propTrigger?: boolean;
+  setPropTrigger?: (value: boolean) => void;
 };
 
 export default function AddRepositoryModal({
   githubAuthToken,
   discordId,
+  repoData,
+  propTrigger,
+  setPropTrigger,
 }: AddRepositoryModalProps) {
   const { control, handleSubmit, setValue, watch } = useForm();
   const [open, setOpen] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedRepo, setSelectedRepo] = useState<string | null>(null);
+  const [openModal, setOpenModal] = useState(propTrigger || false);
+  const [selectedRepo, setSelectedRepo] = useState<string | null>(
+    repoData ? repoData.watched_repo : null
+  );
   const [repos, setRepos] = useState<string[]>([]);
   const [query, setQuery] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -109,7 +118,10 @@ export default function AddRepositoryModal({
         return;
       }
 
-      const result = await watchRepository(data.labels, selectedRepo!);
+      const result = repoData
+        ? await updateRepositoryLabels(repoData.$id, data.labels)
+        : await watchRepository(data.labels, selectedRepo!);
+
       if (result?.error) {
         toast({
           title: "Something Went Wrong",
@@ -122,6 +134,9 @@ export default function AddRepositoryModal({
           description: result?.message,
         });
         setOpenModal(false);
+        if (setPropTrigger) {
+          setPropTrigger(false);
+        }
       }
     } catch (error) {
       console.error("Error starting to watch repository:", error);
@@ -137,7 +152,7 @@ export default function AddRepositoryModal({
 
   useEffect(() => {
     const debouncedSearch = debounce(async () => {
-      if (query && !selectedRepo) {
+      if (query) {
         try {
           const response = await axios.get(
             `${BASE_GITHUB_URL}/search/repositories?q=${query}`,
@@ -167,16 +182,30 @@ export default function AddRepositoryModal({
   }, [labels]);
 
   return (
-    <Credenza open={openModal} onOpenChange={setOpenModal}>
-      <CredenzaTrigger asChild>
-        <Button disabled={!discordId}>Watch New Repository</Button>
-      </CredenzaTrigger>
+    <Credenza
+      open={repoData ? propTrigger : openModal}
+      onOpenChange={(open) => {
+        setOpenModal(open);
+        if (setPropTrigger) {
+          setPropTrigger(open);
+        }
+      }}
+    >
+      {!repoData && (
+        <CredenzaTrigger asChild>
+          <Button disabled={!discordId}>Watch New Repository</Button>
+        </CredenzaTrigger>
+      )}
+
       <CredenzaContent>
         <CredenzaHeader>
-          <CredenzaTitle>Add New Repository</CredenzaTitle>
+          <CredenzaTitle>
+            {repoData ? "Update Repository" : "Add New Repository"}
+          </CredenzaTitle>
           <CredenzaDescription>
-            Select a repository and add labels of interest to start watching its
-            issues.
+            {repoData
+              ? "Update the repository labels."
+              : "Select a repository and add labels of interest to start watching its issues."}
           </CredenzaDescription>
         </CredenzaHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -188,7 +217,11 @@ export default function AddRepositoryModal({
                 </Label>
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger disabled={loading} asChild>
-                    <Button variant="outline" className="w-full justify-start">
+                    <Button
+                      disabled={!!repoData}
+                      variant="outline"
+                      className="w-full justify-start"
+                    >
                       {selectedRepo ? (
                         <>{selectedRepo}</>
                       ) : (
@@ -229,6 +262,10 @@ export default function AddRepositoryModal({
                 control={control}
                 setValue={setValue}
                 selectedRepo={selectedRepo}
+                initialTags={repoData?.labels.map((label, index) => ({
+                  id: index.toString(),
+                  text: label,
+                }))}
               />
             </div>
           </CredenzaBody>
@@ -239,7 +276,7 @@ export default function AddRepositoryModal({
               </Button>
             </CredenzaClose>
             <Button disabled={loading || !hasLabels} type="submit">
-              Start Watching
+              {repoData ? "Update" : "Start Watching"}
             </Button>
           </CredenzaFooter>
         </form>

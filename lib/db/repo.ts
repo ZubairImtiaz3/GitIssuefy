@@ -58,6 +58,31 @@ export const watchRepository = async (
     }
 };
 
+export const updateRepositoryLabels = async (
+    repoId: string,
+    labels: { id: number, text: string }[]
+) => {
+    try {
+        const labelStrings = labels.map(label => label.text);
+
+        await updateDocument(
+            process.env.NEXT_GITISSUEFYDB_ID!,
+            process.env.NEXT_WATCHED_REPOSITORIES_ID!,
+            repoId,
+            {
+                labels: labelStrings,
+            }
+        );
+
+        revalidatePath('/dashboard');
+
+        return { message: "Repository successfully updated." };
+    } catch (error) {
+        console.error("Error updating repository:", error);
+        return { error: "An error occurred while updating the repository." };
+    }
+};
+
 export const updateRepositoryStatus = async (
     id: string,
     state: 'active' | 'deactivate'
