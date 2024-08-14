@@ -16,28 +16,43 @@ interface LabelsCellProps {
   value: string[];
 }
 
-const LabelsCell = ({ value }: LabelsCellProps) => {
-  const showTooltip = value.length > 2;
-  const truncatedLabels =
-    value.length > 2 ? value.slice(0, 2).join(", ") + "..." : value.join(", ");
+ const BadgeList = ({ value }: LabelsCellProps) => (
+   <>
+     {value.map((label, index) => (
+       <Badge key={index} variant="outline" className="mr-1">
+         {label}
+       </Badge>
+     ))}
+   </>
+ );
 
-  return (
-    <TooltipProvider>
-      {showTooltip ? (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <span className="truncate cursor-pointer">{truncatedLabels}</span>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{value.join(", ")}</p>
-          </TooltipContent>
-        </Tooltip>
-      ) : (
-        <span>{truncatedLabels}</span>
-      )}
-    </TooltipProvider>
-  );
-};
+ const LabelsCell = ({ value }: LabelsCellProps) => {
+   const showTooltip = value.length > 2;
+
+   return (
+     <TooltipProvider>
+       {showTooltip ? (
+         <Tooltip>
+           <TooltipTrigger asChild>
+             <span className="truncate cursor-pointer">
+               <BadgeList value={value.slice(0, 2)} />
+               {value.length > 2 && <span>...</span>}
+             </span>
+           </TooltipTrigger>
+           <TooltipContent>
+             <div>
+               <BadgeList value={value} />
+             </div>
+           </TooltipContent>
+         </Tooltip>
+       ) : (
+         <span>
+           <BadgeList value={value} />
+         </span>
+       )}
+     </TooltipProvider>
+   );
+ };
 
 export const columns: ColumnDef<WatchedRepo>[] = [
   {

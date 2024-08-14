@@ -100,10 +100,21 @@ export default function AddRepositoryModal({
 
       // Validate each label using its text property
       const invalidLabels: string[] = [];
+      const uniqueLabels = new Set();
+
       for (const label of data.labels) {
-        const valid = await isValidLabel(label.text);
-        if (!valid) {
-          invalidLabels.push(label.text);
+        const labelTexts = label.text
+          .split(",")
+          .map((text: string) => text.trim());
+
+        for (const labelText of labelTexts) {
+          if (!uniqueLabels.has(labelText)) {
+            uniqueLabels.add(labelText);
+            const valid = await isValidLabel(labelText);
+            if (!valid) {
+              invalidLabels.push(labelText);
+            }
+          }
         }
       }
 

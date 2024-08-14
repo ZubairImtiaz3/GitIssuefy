@@ -5,7 +5,7 @@ import {
   FieldValues,
   UseFormSetValue,
 } from "react-hook-form";
-import { Tag, TagInput } from "emblor";
+import { Delimiter, Tag, TagInput } from "emblor";
 import { Label } from "@/components/ui/label";
 
 type TagFormProps = {
@@ -57,6 +57,7 @@ function TagForm({
               setActiveTagIndex={setActiveTagIndex}
               textCase={"lowercase"}
               disabled={!selectedRepo || disabled}
+              delimiter={Delimiter.Enter}
               {...field}
             />
           )}
