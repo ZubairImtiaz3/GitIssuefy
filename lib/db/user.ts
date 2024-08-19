@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { ID, Query } from "node-appwrite";
 import { listDocuments, createDocument, updateDocument } from "@/lib/db/utils";
 import { getUserRepos, getUserSentNotifications } from "@/lib/db/dashboard";
+import axios from "axios";
 
 export async function getLoggedInUser() {
     try {
@@ -132,5 +133,37 @@ export const userDashboard = async (query?: any[]) => {
         };
     } catch (error) {
         console.error("Error fetching dashboard analytics:", error);
+    }
+};
+
+export const getUserGuildStatus = async () => {
+    try {
+        const profile = await getUserProfile();
+
+        const discordId = profile?.documents[0]?.discord_id;
+        if (!discordId) {
+            return {
+                discordId: null,
+                guildStatus: false,
+                message: "User hasn't connected their Discord yet."
+            };
+        }
+
+        const response = await axios.post(
+            process.env.NEXT_GUILD_STATUS_URL!,
+            { userDiscordId: discordId }
+        );
+
+        return {
+            discordId,
+            guildStatus: response.data.success,
+        };
+    } catch (error) {
+        console.error("Error getting user guild status:", error);
+        return {
+            discordId: null,
+            guildStatus: false,
+            message: "An error occurred while fetching guild status."
+        };
     }
 };

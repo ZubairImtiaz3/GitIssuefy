@@ -38,7 +38,7 @@ import { WatchedRepo } from "@/components/tables/repository-table/watch-repo-tab
 
 type AddRepositoryModalProps = {
   githubAuthToken?: string | undefined;
-  discordId?: string | undefined;
+  guildStatus?: boolean;
   repoData?: WatchedRepo;
   propTrigger?: boolean;
   setPropTrigger?: (value: boolean) => void;
@@ -46,7 +46,7 @@ type AddRepositoryModalProps = {
 
 export default function AddRepositoryModal({
   githubAuthToken,
-  discordId,
+  guildStatus,
   repoData,
   propTrigger,
   setPropTrigger,
@@ -204,7 +204,7 @@ export default function AddRepositoryModal({
     >
       {!repoData && (
         <CredenzaTrigger asChild>
-          <Button disabled={!discordId}>Watch New Repository</Button>
+          <Button disabled={!guildStatus}>Watch New Repository</Button>
         </CredenzaTrigger>
       )}
 

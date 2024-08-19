@@ -8,17 +8,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AddRepositoryModal from "@/components/AddRepoModal";
-import { userDashboard, getUserIdentity, getUserProfile } from "@/lib/db/user";
+import {
+  userDashboard,
+  getUserIdentity,
+  getUserGuildStatus,
+} from "@/lib/db/user";
 
 export default async function Dashboard() {
-  const [identity, profile, dashboard] = await Promise.all([
+  const [identity, profileStatus, dashboard] = await Promise.all([
     getUserIdentity("github"),
-    getUserProfile(),
+    getUserGuildStatus(),
     userDashboard(),
   ]);
 
   const providerToken = identity?.providerAccessToken;
-  const discordId = profile?.documents[0].discord_id;
 
   const watchedRepos = dashboard?.repos?.documents.map((doc) => ({
     $id: doc.$id,
@@ -29,6 +32,8 @@ export default async function Dashboard() {
     status: doc.status,
   }));
 
+  const { discordId, guildStatus } = profileStatus;
+
   return (
     <>
       <div className="flex gap-4 flex-wrap">
@@ -36,15 +41,18 @@ export default async function Dashboard() {
           <CardHeader className="pb-3">
             <CardTitle>Track Issues</CardTitle>
             <CardDescription className="max-w-lg text-balance leading-relaxed">
-              {!discordId && <b>Connect your discord.&nbsp;</b>}Stay informed on
-              your favorite open-source projects by watching repositories issues
-              with your labels of interest.
+              {!discordId && <b>Connect your discord.&nbsp;</b>}
+              {!guildStatus && discordId && (
+                <b>Invite our bot to your server to get started.&nbsp;</b>
+              )}
+              Stay informed on your favorite open-source projects by watching
+              repositories issues with your labels of interest.
             </CardDescription>
           </CardHeader>
           <CardFooter>
             <AddRepositoryModal
               githubAuthToken={providerToken}
-              discordId={discordId}
+              guildStatus={guildStatus}
             />
           </CardFooter>
         </Card>
