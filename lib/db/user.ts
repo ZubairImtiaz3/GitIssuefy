@@ -154,6 +154,11 @@ export const getUserGuildStatus = async () => {
             { userDiscordId: discordId }
         );
 
+        console.log({
+            discordId,
+            guildStatus: response.data.success,
+        })
+
         return {
             discordId,
             guildStatus: response.data.success,
