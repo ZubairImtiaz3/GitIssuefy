@@ -7,29 +7,27 @@ import Link from "next/link";
 
 export const Header = () => {
   return (
-    <header className="w-full z-40 fixed top-0 left-0 bg-background">
-      <div className="container relative mx-auto min-h-20 flex gap-4 flex-row lg:grid lg:grid-cols-2 items-center">
-        <div className="flex">
-          <p className="font-semibold">GITISSUEFY</p>
-        </div>
+    <header className="w-[93%] z-50 fixed top-4 left-1/2 transform -translate-x-1/2 bg-primary/20 backdrop-blur-md rounded-full sm:relative sm:bg-white/5 sm:rounded-none sm:top-0 sm:w-full">
+      <div className="container mx-auto min-h-14 sm:min-h-20 flex items-center">
+        <p className="font-semibold">GITISSUEFY</p>
         <div className="flex justify-end w-full gap-4">
           <div className="flex items-center justify-center space-x-4">
             <a
-              className="text-gray-700"
+              className="text-primary"
               href="https://twitter.com/ZubairImtiaz1"
               target="_blank"
             >
               <Icons.twitter className="h-[1.2rem] w-[1.2rem]" />
             </a>
             <a
-              className="text-gray-700"
+              className="text-primary"
               target="_blank"
               href="https://www.linkedin.com/in/zubair9395/"
             >
               <Icons.linkedin className="h-[1.55rem] w-[1.55rem]" />
             </a>
             <a
-              className="text-gray-700"
+              className="text-primary"
               target="_blank"
               href="https://github.com/ZubairImtiaz3"
             >

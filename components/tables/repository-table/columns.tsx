@@ -11,48 +11,47 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import dayjs from "dayjs";
-
 interface LabelsCellProps {
   value: string[];
 }
 
- const BadgeList = ({ value }: LabelsCellProps) => (
-   <>
-     {value.map((label, index) => (
-       <Badge key={index} variant="outline" className="mr-1">
-         {label}
-       </Badge>
-     ))}
-   </>
- );
+const BadgeList = ({ value }: LabelsCellProps) => (
+  <>
+    {value.map((label, index) => (
+      <Badge key={index} variant="outline" className="mr-1">
+        {label}
+      </Badge>
+    ))}
+  </>
+);
 
- const LabelsCell = ({ value }: LabelsCellProps) => {
-   const showTooltip = value.length > 2;
+const LabelsCell = ({ value }: LabelsCellProps) => {
+  const showTooltip = value.length > 2;
 
-   return (
-     <TooltipProvider>
-       {showTooltip ? (
-         <Tooltip>
-           <TooltipTrigger asChild>
-             <span className="truncate cursor-pointer">
-               <BadgeList value={value.slice(0, 2)} />
-               {value.length > 2 && <span>...</span>}
-             </span>
-           </TooltipTrigger>
-           <TooltipContent>
-             <div>
-               <BadgeList value={value} />
-             </div>
-           </TooltipContent>
-         </Tooltip>
-       ) : (
-         <span>
-           <BadgeList value={value} />
-         </span>
-       )}
-     </TooltipProvider>
-   );
- };
+  return (
+    <TooltipProvider>
+      {showTooltip ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="truncate cursor-pointer">
+              <BadgeList value={value.slice(0, 2)} />
+              {value.length > 2 && <span>...</span>}
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>
+            <div>
+              <BadgeList value={value} />
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        <span>
+          <BadgeList value={value} />
+        </span>
+      )}
+    </TooltipProvider>
+  );
+};
 
 export const columns: ColumnDef<WatchedRepo>[] = [
   {
@@ -77,11 +76,17 @@ export const columns: ColumnDef<WatchedRepo>[] = [
   {
     accessorKey: "watched_repo",
     header: "Repository",
+    cell: ({ row }) => {
+      return <div className="break-all">{row.original.watched_repo}</div>;
+    },
   },
   {
     accessorKey: "labels",
     header: "Labels",
     cell: (info) => <LabelsCell value={info.getValue() as string[]} />,
+    meta: {
+      className: "hidden md:table-cell",
+    },
   },
   {
     accessorKey: "last_checked",
@@ -89,6 +94,9 @@ export const columns: ColumnDef<WatchedRepo>[] = [
     cell: ({ row }) => {
       const date = row.original.last_checked;
       return date ? dayjs(new Date(date)).format("MM/DD/YYYY HH:mm:ss") : "N/A";
+    },
+    meta: {
+      className: "hidden md:table-cell",
     },
   },
   {
