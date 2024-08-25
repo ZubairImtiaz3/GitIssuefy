@@ -1,13 +1,11 @@
 import { Compass, MoveRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Ripple from "@/components/ui/ripple";
+import HomeAuthBtn from "@/components/HomeAuth";
+import { Suspense } from "react";
+import { SkeletonButton } from "@/app/(dashboard)/dashboard/loading";
 
-import { AuthButton } from "@/components/AuthButton";
-import { getLoggedInUser } from "@/lib/db/user";
-
-export const Hero = async () => {
-  const user = await getLoggedInUser();
-
+export const Hero = () => {
   return (
     <>
       <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
@@ -33,7 +31,9 @@ export const Hero = async () => {
               <Button size="lg" className="gap-4" variant="outline">
                 Learn More <Compass className="h-[18px] w-[18px]" />
               </Button>
-              <AuthButton provider="github" user={user} />
+              <Suspense fallback={<SkeletonButton />}>
+                <HomeAuthBtn />
+              </Suspense>
             </div>
           </div>
         </div>

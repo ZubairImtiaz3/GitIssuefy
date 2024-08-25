@@ -5,6 +5,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { Loader } from "lucide-react";
 
 export default function Loading() {
   return (
@@ -66,5 +67,13 @@ function SkeletonTable() {
         ))}
       </CardContent>
     </Card>
+  );
+}
+
+export function SkeletonButton() {
+  return (
+    <Skeleton className="h-11 rounded-md w-52 gap-4 bg-primary flex items-center justify-center">
+      <Loader className="animate-spin text-black" />
+    </Skeleton>
   );
 }
