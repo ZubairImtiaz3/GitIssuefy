@@ -25,7 +25,7 @@ export async function signUpWithProvider(provider: Provider) {
     const redirectUrl = await account.createOAuth2Token(
         oauthProvider,
         `${origin}/oauth?provider=${provider}`,
-        `${origin}/signup` // Todo: Handle Failure Exception
+        `${origin}/`
     );
 
     return redirect(redirectUrl);

@@ -62,6 +62,7 @@ const Sidebar = async () => {
             <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
               {profile.discord_id ? (
                 <Link
+                  target="_blank"
                   href={
                     "https://discord.com/oauth2/authorize?client_id=1269794139570962594&permissions=75776&integration_type=0&scope=bot"
                   }
