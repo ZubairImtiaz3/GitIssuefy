@@ -67,7 +67,7 @@ export default async function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
-                +3 new this week
+                Actived Favorites
               </div>
             </CardContent>
           </Card>
@@ -81,7 +81,7 @@ export default async function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
-                +10% from last month
+                Pings on Discord.
               </div>
             </CardContent>
           </Card>

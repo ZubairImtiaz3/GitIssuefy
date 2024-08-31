@@ -123,7 +123,7 @@ export const userDashboard = async (query?: any[]) => {
             getUserSentNotifications([Query.equal('status', 'sent')])
         ]);
 
-        const totalRepos = repos?.total
+        const totalRepos = repos?.documents?.filter(repo => repo.status === 'active')?.length || 0;
         const totalNotifications = notifications?.total
 
         return {
