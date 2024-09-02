@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     cookies().set("my-custom-session", session.secret, {
         path: "/",
         httpOnly: true,
-        sameSite: provider === 'discord' ? 'lax' : 'strict',
+        sameSite: 'lax',
         secure: true,
     });
 
