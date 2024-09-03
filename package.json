@@ -26,6 +26,7 @@
     "cmdk": "^1.0.0",
     "dayjs": "^1.11.12",
     "emblor": "^1.4.4",
+    "framer-motion": "^11.4.0",
     "loadsh": "^0.0.4",
     "lodash": "^4.17.21",
     "lucide-react": "^0.418.0",

@@ -4,6 +4,7 @@ import Ripple from "@/components/ui/ripple";
 import HomeAuthBtn from "@/components/HomeAuth";
 import { Suspense } from "react";
 import { SkeletonButton } from "@/app/(dashboard)/dashboard/loading";
+import HeroVideo from "@/components/HeroVideo";
 
 export const Hero = () => {
   return (
@@ -38,6 +39,7 @@ export const Hero = () => {
           </div>
         </div>
       </div>
+      <HeroVideo />
     </>
   );
 };
