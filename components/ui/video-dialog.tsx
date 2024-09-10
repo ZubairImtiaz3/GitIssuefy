@@ -67,6 +67,16 @@ const animationVariants = {
   },
 };
 
+  const cardVariants = {
+    hidden: { y: 90, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+    hover: { y: -5 },
+  };
+
 export default function HeroVideoDialog({
   animationStyle = "from-center",
   videoSrc,
@@ -78,7 +88,12 @@ export default function HeroVideoDialog({
   const selectedAnimation = animationVariants[animationStyle];
 
   return (
-    <div className={cn("relative", className)}>
+    <>
+    <motion.div
+     variants={cardVariants}
+     initial="hidden"
+     whileInView="visible" 
+     className={cn("relative", className)}>
       <div
         className="relative cursor-pointer group"
         onClick={() => setIsVideoOpen(true)}
@@ -106,6 +121,8 @@ export default function HeroVideoDialog({
           </div>
         </div>
       </div>
+    </motion.div>
+   
       <AnimatePresence>
         {isVideoOpen && (
           <motion.div
@@ -135,6 +152,6 @@ export default function HeroVideoDialog({
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
