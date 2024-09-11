@@ -29,9 +29,11 @@ export const Hero = () => {
               </p>
             </div>
             <div className="flex flex-row gap-3 flex-wrap-reverse justify-center items-center">
-              <Button size="lg" className="gap-4" variant="outline">
-                Learn More <Compass className="h-[18px] w-[18px]" />
-              </Button>
+              <a href="#demo">
+                <Button size="lg" className="gap-4" variant="outline">
+                  Learn More <Compass className="h-[18px] w-[18px]" />
+                </Button>
+              </a>
               <Suspense fallback={<SkeletonButton />}>
                 <HomeAuthBtn />
               </Suspense>

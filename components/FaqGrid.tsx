@@ -35,9 +35,15 @@ export function FaqGrid() {
       ),
     },
     {
-      question: "Do you offer international shipping?",
-      answer:
-        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.ut aliquip ex ea commodo consequat",
+      question: "What happens if an issue is created but labeled later?",
+      answer: (
+        <>
+          You will still receive a notification! Even if an issue is{" "}
+          <Mark>created first and labeled later</Mark>, as long as it gets a
+          label you&apos;re watching, you&apos;ll be notified. Timing
+          doesn&apos;t matter—you won&apos;t miss it.
+        </>
+      ),
     },
     {
       question: "Can I mix multiple and single labels for issue tracking?",
@@ -62,9 +68,14 @@ export function FaqGrid() {
       ),
     },
     {
-      question: "What if I receive a damaged item?",
-      answer:
-        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
+      question: "What if an existing issue gets updated with a label?",
+      answer: (
+        <>
+          Yes, you&apos;ll still receive a notification. If an{" "}
+          <Mark>existing issue is updated</Mark> with a label you&apos;re
+          watching or it completes one of your multiple combo of labels.
+        </>
+      ),
     },
     {
       question: "Why do I need to invite the bot to receive notifications?",
@@ -112,7 +123,7 @@ export function FaqGrid() {
   };
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-4 px-4 pb-20 md:px-0 md:py-20">
+    <div className="mx-auto grid max-w-6xl gap-4 px-4 pb-28 md:px-0 md:py-28">
       <h2 className="text-center text-4xl font-medium tracking-tight md:text-5xl">
         Frequently asked questions
       </h2>

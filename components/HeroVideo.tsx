@@ -2,7 +2,7 @@ import HeroVideoDialog from "@/components/ui/video-dialog";
 
 export default function HeroVideo() {
   return (
-    <div className="max-w-6xl mx-auto px-4 lg:px-0 pb-28">
+    <div id="demo" className="max-w-6xl mx-auto px-4 lg:px-0 pb-28 scroll-m-24">
       <HeroVideoDialog
         className="dark:hidden block"
         animationStyle="top-in-bottom-out"

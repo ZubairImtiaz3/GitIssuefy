@@ -1,7 +1,7 @@
 import { GitHubLogoIcon, DiscordLogoIcon } from "@radix-ui/react-icons";
 import { BotIcon, Tags } from "lucide-react";
-import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
-import Image from "next/image";
+import { HoverCard } from "./ui/hover-card";
+import Marquee from "./ui/marque";
 
 const features = [
   {
@@ -48,18 +48,22 @@ const features = [
 
 export function HowItWorks() {
   return (
-    <div className="mx-auto max-w-6xl gap-4 px-4 pb-20 md:px-0 md:py-20">
+    <div className="mx-auto max-w-6xl gap-4 px-4 pb-28 md:px-0 md:py-20">
       <div className="text-center pb-20">
         <p className="text-lg leading-relaxed text-muted-foreground">
           How it works
         </p>
         <h2 className="text-4xl">Just 4 steps to get started</h2>
       </div>
-      <BentoGrid>
-        {features.map((feature, idx) => (
-          <BentoCard key={idx} {...feature} />
-        ))}
-      </BentoGrid>
+      <div className="flex relative">
+        <Marquee pauseOnHover className="[--duration:20s]">
+          {features.map((feature, idx) => (
+            <HoverCard key={idx} {...feature} />
+          ))}
+        </Marquee>
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background"></div>
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background"></div>
+      </div>
     </div>
   );
 }
