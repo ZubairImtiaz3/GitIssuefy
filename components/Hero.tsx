@@ -5,6 +5,7 @@ import HomeAuthBtn from "@/components/HomeAuth";
 import { Suspense } from "react";
 import { SkeletonButton } from "@/app/(dashboard)/dashboard/loading";
 import HeroVideo from "@/components/HeroVideo";
+import Link from "next/link";
 
 export const Hero = () => {
   return (
@@ -14,9 +15,14 @@ export const Hero = () => {
 
         <div className="container mx-auto z-40">
           <div className="flex gap-8 py-36 lg:py-28 items-center justify-center flex-col">
-            <Button variant="secondary" size="sm" className="gap-4">
-              Read our launch article <MoveRight className="w-4 h-4" />
-            </Button>
+            <Link
+              target="_blank"
+              href={"https://zubair-imtiaz.vercel.app/blog/01-gitissuefy"}
+            >
+              <Button variant="secondary" size="sm" className="gap-4">
+                Read our launch article <MoveRight className="w-4 h-4" />
+              </Button>
+            </Link>
             <div className="flex gap-4 flex-col">
               <h1 className="text-5xl md:text-7xl max-w-2xl tracking-tighter text-center font-regular">
                 Stay Updated, Contribute Faster
