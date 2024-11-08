@@ -17,6 +17,7 @@ export const AuthButton = ({ user, provider }: AuthButtonProps) => {
 
   const handleSignIn = async () => {
     setLoading(true);
+
     try {
       const error = await signUpWithProvider(provider);
 
@@ -64,6 +65,7 @@ export const AuthButton = ({ user, provider }: AuthButtonProps) => {
           type="submit"
           size="lg"
           className="gap-4 w-full"
+          data-umami-event="Sign In / Connect"
         >
           {provider === "github" ? (
             <>

@@ -16,6 +16,7 @@ export const Header = () => {
               className="text-primary"
               href="https://twitter.com/ZubairImtiaz1"
               target="_blank"
+              data-umami-event="Twitter Profile"
             >
               <Icons.twitter className="h-[1.2rem] w-[1.2rem]" />
             </a>
@@ -23,6 +24,7 @@ export const Header = () => {
               className="text-primary"
               target="_blank"
               href="https://www.linkedin.com/in/zubair9395/"
+              data-umami-event="Linkedin Profile"
             >
               <Icons.linkedin className="h-[1.55rem] w-[1.55rem]" />
             </a>
@@ -30,6 +32,7 @@ export const Header = () => {
               className="text-primary"
               target="_blank"
               href="https://github.com/ZubairImtiaz3"
+              data-umami-event="Github Profile"
             >
               <Icons.gitHub className="h-6 w-6" />
             </a>
@@ -39,7 +42,7 @@ export const Header = () => {
             href={"https://github.com/ZubairImtiaz3/GitIssuefy"}
             target="_blank"
           >
-            <Button className="hidden sm:block">
+            <Button data-umami-event="GitHub Star" className="hidden sm:block">
               <span className="flex gap-2">
                 Star on Github <Github className="h-5 w-5" />
               </span>

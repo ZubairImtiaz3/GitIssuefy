@@ -17,6 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html className="scroll-smooth" lang="en">
+      <head>
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="87fdbebf-70f9-4a71-a34b-287aa1c89dfa"
+        ></script>
+      </head>
       <body className={inter.className}>
         {children}
         <Toaster />

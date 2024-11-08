@@ -19,7 +19,12 @@ export const Hero = () => {
               target="_blank"
               href={"https://zubair-imtiaz.vercel.app/blog/01-gitissuefy"}
             >
-              <Button variant="secondary" size="sm" className="gap-4">
+              <Button
+                data-umami-event="Read Blog"
+                variant="secondary"
+                size="sm"
+                className="gap-4"
+              >
                 Read our launch article <MoveRight className="w-4 h-4" />
               </Button>
             </Link>
