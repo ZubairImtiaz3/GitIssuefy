@@ -8,7 +8,7 @@
 
 A web app that lets you track issues in your favorite open-source projects based on your selected labels, and receive notifications through Discord.
 
-<img src="https://media.licdn.com/dms/image/v2/D4D22AQH-ZjjRfmWppQ/feedshare-shrink_800/feedshare-shrink_800/0/1726377577110?e=1730332800&v=beta&t=eEV2BwJxmxePiPaY8nTbCXz1UZS2pVA5A-Uh-jEKTv8" alt="logo"/>
+<img src="/public/home.png" alt="logo"/>
 </div>
 
 </br>
