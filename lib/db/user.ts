@@ -3,7 +3,7 @@ import { createSessionClient } from "@/lib/server/appwrite";
 import { cookies } from "next/headers";
 import { ID, Query } from "node-appwrite";
 import { listDocuments, createDocument, updateDocument } from "@/lib/db/utils";
-import { getUserRepos, getUserSentNotifications } from "@/lib/db/dashboard";
+import { getUserRepos, getUserNotifications } from "@/lib/db/dashboard";
 import axios from "axios";
 
 export async function getLoggedInUser() {
@@ -44,8 +44,8 @@ export async function getUserIdentity(provider: "github" | "discord") {
 
 export const getUserProfile = async () => {
     return listDocuments(
-        process.env.NEXT_GITISSUEFYDB_ID!,
-        process.env.NEXT_USER_COLLECTION_ID!,
+        process.env.GITISSUEFYDB_ID!,
+        process.env.USER_COLLECTION_ID!,
     );
 };
 
@@ -63,8 +63,8 @@ export const updateOrCreateUser = async () => {
                 const userDocument = user.documents[0];
 
                 await updateDocument(
-                    process.env.NEXT_GITISSUEFYDB_ID!,
-                    process.env.NEXT_USER_COLLECTION_ID!,
+                    process.env.GITISSUEFYDB_ID!,
+                    process.env.USER_COLLECTION_ID!,
                     userDocument.$id,
                     {
                         github_access_token: providerAccessToken,
@@ -77,8 +77,8 @@ export const updateOrCreateUser = async () => {
                 const user = await getLoggedInUser();
 
                 await createDocument(
-                    process.env.NEXT_GITISSUEFYDB_ID!,
-                    process.env.NEXT_USER_COLLECTION_ID!,
+                    process.env.GITISSUEFYDB_ID!,
+                    process.env.USER_COLLECTION_ID!,
                     ID.custom(userId),
                     {
                         github_access_token: providerAccessToken,
@@ -102,8 +102,8 @@ export const updateUserDiscordId = async () => {
             const { providerUid, userId } = loggedInUser;
 
             await updateDocument(
-                process.env.NEXT_GITISSUEFYDB_ID!,
-                process.env.NEXT_USER_COLLECTION_ID!,
+                process.env.GITISSUEFYDB_ID!,
+                process.env.USER_COLLECTION_ID!,
                 userId,
                 {
                     discord_id: providerUid,
@@ -119,7 +119,7 @@ export const userDashboard = async () => {
     try {
         const [repos, notifications] = await Promise.all([
             getUserRepos(),
-            getUserSentNotifications([Query.equal('status', 'sent')])
+            getUserNotifications([Query.equal('status', 'sent')])
         ]);
 
         const totalRepos = repos?.documents?.filter(repo => repo.status === 'active')?.length || 0;
@@ -149,7 +149,7 @@ export const getUserGuildStatus = async () => {
         }
 
         const response = await axios.post(
-            process.env.NEXT_GUILD_STATUS_URL!,
+            process.env.GUILD_STATUS_URL!,
             { userDiscordId: discordId }
         );
 

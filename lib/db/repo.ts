@@ -21,8 +21,8 @@ export const watchRepository = async (
         // Check if the repository is already watched
         const query = [Query.equal("watched_repo", watched_repo)];
         const existingRepos = await listDocuments(
-            process.env.NEXT_GITISSUEFYDB_ID!,
-            process.env.NEXT_WATCHED_REPOSITORIES_ID!,
+            process.env.GITISSUEFYDB_ID!,
+            process.env.WATCHED_REPOSITORIES_ID!,
             query
         );
 
@@ -31,8 +31,8 @@ export const watchRepository = async (
         }
 
         await createDocument(
-            process.env.NEXT_GITISSUEFYDB_ID!,
-            process.env.NEXT_WATCHED_REPOSITORIES_ID!,
+            process.env.GITISSUEFYDB_ID!,
+            process.env.WATCHED_REPOSITORIES_ID!,
             ID.unique(),
             {
                 user_id: userId,
@@ -58,8 +58,8 @@ export const updateRepositoryLabels = async (
         const labelStrings = labels.map(label => label.text);
 
         await updateDocument(
-            process.env.NEXT_GITISSUEFYDB_ID!,
-            process.env.NEXT_WATCHED_REPOSITORIES_ID!,
+            process.env.GITISSUEFYDB_ID!,
+            process.env.WATCHED_REPOSITORIES_ID!,
             repoId,
             {
                 labels: labelStrings,
@@ -81,8 +81,8 @@ export const updateRepositoryStatus = async (
 ) => {
     try {
         await updateDocument(
-            process.env.NEXT_GITISSUEFYDB_ID!,
-            process.env.NEXT_WATCHED_REPOSITORIES_ID!,
+            process.env.GITISSUEFYDB_ID!,
+            process.env.WATCHED_REPOSITORIES_ID!,
             id,
             {
                 status: state,
@@ -103,8 +103,8 @@ export const deleteRepository = async (
 ) => {
     try {
         await deleteDocument(
-            process.env.NEXT_GITISSUEFYDB_ID!,
-            process.env.NEXT_WATCHED_REPOSITORIES_ID!,
+            process.env.GITISSUEFYDB_ID!,
+            process.env.WATCHED_REPOSITORIES_ID!,
             id
         );
 

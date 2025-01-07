@@ -3,8 +3,8 @@ import { listDocuments } from "@/lib/db/utils";
 export const getUserRepos = async (query?: string[]) => {
     try {
         return await listDocuments(
-            process.env.NEXT_GITISSUEFYDB_ID!,
-            process.env.NEXT_WATCHED_REPOSITORIES_ID!,
+            process.env.GITISSUEFYDB_ID!,
+            process.env.WATCHED_REPOSITORIES_ID!,
             query
         );
     } catch (error) {
@@ -12,11 +12,11 @@ export const getUserRepos = async (query?: string[]) => {
     }
 };
 
-export const getUserSentNotifications = async (query?: string[]) => {
+export const getUserNotifications = async (query?: string[]) => {
     try {
         return await listDocuments(
-            process.env.NEXT_GITISSUEFYDB_ID!,
-            process.env.NEXT_NOTIFICATION_COLLECTION_ID!,
+            process.env.GITISSUEFYDB_ID!,
+            process.env.NOTIFICATION_COLLECTION_ID!,
             query
         );
     } catch (error) {
