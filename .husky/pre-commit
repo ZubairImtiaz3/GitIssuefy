@@ -1,14 +1,22 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Identify & Kill the GitIssuefy process running on port 3000
+echo "🛑 Stopping any process running on port 3000..."
+npx kill-port 3000
+
 echo '🤔🤔🤔🤔... Alright.... Trying to build now. 🤔🤔🤔🤔'
 
-npm run build ||
-(
+# Attempt to build
+npm run build || (
     echo '❌👷🔨❌ Better call Bob... Because your build failed ❌👷🔨❌
             Next build failed: View the errors above to see why. 
     '
     false;
 )
 
-echo '✅✅✅✅ Everything Good... I am committing this now. ✅✅✅✅'
+echo '✅✅✅✅ Everything Good... Committing now. ✅✅✅✅'
+
+# Restart the dev server
+echo "🔄 Restarting the npm run dev server..."
+npm run dev &
