@@ -4,14 +4,6 @@ import { ID, Query, } from "node-appwrite";
 import { listDocuments, createDocument, updateDocument, deleteDocument } from "./utils";
 import { revalidatePath } from "next/cache";
 
-export const getWatchRepositories = async (query?: any[]) => {
-    return listDocuments(
-        process.env.NEXT_GITISSUEFYDB_ID!,
-        process.env.NEXT_WATCHED_REPOSITORIES_ID!,
-        query
-    );
-};
-
 export const watchRepository = async (
     labels: { id: number, text: string }[],
     watched_repo: string,

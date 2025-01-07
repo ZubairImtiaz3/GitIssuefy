@@ -10,6 +10,11 @@ import {
 import { motion } from "framer-motion";
 import { Mark } from "@/components/ui/mark";
 
+type FAQItem = {
+  question: string;
+  answer: React.ReactNode;
+};
+
 export function FaqGrid() {
   const faqItems = [
     {
@@ -101,7 +106,7 @@ export function FaqGrid() {
     },
   ];
 
-  const splitIntoColumns = (items: any) => {
+  const splitIntoColumns = (items: FAQItem[]) => {
     const itemsPerColumn = Math.ceil(items.length / 3);
     return [
       items.slice(0, itemsPerColumn),
@@ -140,7 +145,7 @@ export function FaqGrid() {
       <div className="mt-10 grid w-full grid-cols-1 items-start gap-4 md:grid-cols-3">
         {columns.map((column, index) => (
           <div key={index} className="grid grid-cols-1 items-start gap-4">
-            {column.map((item: any, itemIndex: any) => (
+            {column.map((item: FAQItem, itemIndex: number) => (
               <motion.div
                 key={itemIndex}
                 variants={cardVariants}

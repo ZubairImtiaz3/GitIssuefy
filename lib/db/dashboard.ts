@@ -1,6 +1,6 @@
 import { listDocuments } from "@/lib/db/utils";
 
-export const getUserRepos = async (query?: any[]) => {
+export const getUserRepos = async (query?: string[]) => {
     try {
         return await listDocuments(
             process.env.NEXT_GITISSUEFYDB_ID!,
@@ -12,7 +12,7 @@ export const getUserRepos = async (query?: any[]) => {
     }
 };
 
-export const getUserSentNotifications = async (query?: any[]) => {
+export const getUserSentNotifications = async (query?: string[]) => {
     try {
         return await listDocuments(
             process.env.NEXT_GITISSUEFYDB_ID!,

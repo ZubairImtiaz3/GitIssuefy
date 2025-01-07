@@ -1,6 +1,6 @@
 import { createSessionClient } from "@/lib/server/appwrite";
 
-export const listDocuments = async (databaseId: string, collectionId: string, query?: any[]) => {
+export const listDocuments = async (databaseId: string, collectionId: string, query?: string[]) => {
     try {
         const { databases } = await createSessionClient();
         const result = await databases.listDocuments(databaseId, collectionId, query);

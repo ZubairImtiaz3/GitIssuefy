@@ -42,11 +42,10 @@ export async function getUserIdentity(provider: "github" | "discord") {
     }
 }
 
-export const getUserProfile = async (query?: any[]) => {
+export const getUserProfile = async () => {
     return listDocuments(
         process.env.NEXT_GITISSUEFYDB_ID!,
         process.env.NEXT_USER_COLLECTION_ID!,
-        query
     );
 };
 
@@ -116,10 +115,10 @@ export const updateUserDiscordId = async () => {
     }
 };
 
-export const userDashboard = async (query?: any[]) => {
+export const userDashboard = async () => {
     try {
         const [repos, notifications] = await Promise.all([
-            getUserRepos(query),
+            getUserRepos(),
             getUserSentNotifications([Query.equal('status', 'sent')])
         ]);
 
