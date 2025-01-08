@@ -19,7 +19,7 @@ export async function getLoggedInUser() {
 export async function SignOutUser() {
     try {
         const { account } = await createSessionClient();
-        cookies().delete("my-custom-session");
+        cookies().delete("gitissuefy-session");
         await account.deleteSession("current");
         return null;
     } catch (error) {

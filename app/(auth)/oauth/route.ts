@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     const { account } = await createAdminClient();
     const session = await account.createSession(userId, secret);
 
-    cookies().set("my-custom-session", session.secret, {
+    cookies().set("gitissuefy-session", session.secret, {
         path: "/",
         httpOnly: true,
         sameSite: 'lax',
